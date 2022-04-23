@@ -28,10 +28,15 @@ WCHAR temp[8068] = { ' ' };
 double cpu = -1, memory = -1;
 int cpu_mas[SIZE] = { -1 }, mem_mas[SIZE] = { -1 };
 
+int iSelect;
+POINT p;
+HMENU hPopupMenu;
+
 
 LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 BOOL InitializationInstance(HINSTANCE hInstance, int nCmdShow);
 ATOM TaskManagerClass(HINSTANCE hInstance);
+BOOL _killProcess(int procID);
 
 void MainMenuAdd(HWND hwnd);
 

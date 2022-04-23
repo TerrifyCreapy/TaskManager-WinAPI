@@ -1,10 +1,7 @@
 ﻿  Main.cpp
 C:\Users\konev\source\repos\WinApi\WinApi\stdafx.h(31,2): warning C4091: typedef : пропускается слева от "THREADS", когда ни одна переменная не объявлена
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(28,25): warning C4101: currentProcess: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(226,18): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(245,16): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-  stdafx.cpp
-C:\Users\konev\source\repos\WinApi\WinApi\stdafx.h(31,2): warning C4091: typedef : пропускается слева от "THREADS", когда ни одна переменная не объявлена
-  Создание кода...
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(188): warning C4715: CourseWorkProc: значение возвращается не при всех путях выполнения
+C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(24,24): warning C4101: currentProcess: неиспользованная локальная переменная
+C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(289,18): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(308,16): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(223): warning C4715: CourseWorkProc: значение возвращается не при всех путях выполнения
   WinApi.vcxproj -> C:\Users\konev\source\repos\WinApi\Debug\WinApi.exe
