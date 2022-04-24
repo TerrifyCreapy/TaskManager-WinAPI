@@ -1,9 +1,8 @@
 #pragma once
 #define DIV 1048576	// = 1MB
 #define ID_EDIT 2002
-#define SIZE 400
-#define GB 1073741824
-#define ID_CPU 12
+#define CPU_ID 12
+#define RAM_ID 15
 
 TCHAR mwName[100];
 TCHAR title[100];
@@ -25,8 +24,8 @@ WCHAR cpu_char[6] = { ' ' };
 WCHAR mem_char[8] = { ' ' };
 WCHAR buffer[8068] = { ' ' };
 WCHAR temp[8068] = { ' ' };
+
 double cpu = -1, memory = -1;
-int cpu_mas[SIZE] = { -1 }, mem_mas[SIZE] = { -1 };
 
 int iSelect;
 POINT p;

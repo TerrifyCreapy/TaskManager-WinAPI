@@ -55,7 +55,7 @@ BEGIN
     "p",            ID_PROCESSES_OPEN,      ASCII,  ALT, NOINVERT
     "p",            ID_PROCESSES_OPEN,      ASCII,  ALT, NOINVERT
     "e",            IDM_EXIT,               ASCII,  ALT, NOINVERT
-    "ó",            IDM_EXIT,               ASCII, ALT, NOINVERT
+    1091,           IDM_EXIT,               ASCII,  ALT, NOINVERT
 END
 
 
@@ -72,6 +72,16 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,184,197,50,14
     LISTBOX         LIST1,7,7,227,182,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON10               ICON                    "pc.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////

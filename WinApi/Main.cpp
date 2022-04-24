@@ -37,7 +37,7 @@ INT_PTR CALLBACK ProcessList(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 		{
 			do
 			{
-				wsprintfW(buffer, L" ID [%05d]           Threads [%03d] %30s", processes.th32ProcessID, processes.cntThreads, processes.szExeFile);
+				wsprintfW(buffer, L" ID [%05d]      Threads [%03d] %30s", processes.th32ProcessID, processes.cntThreads, processes.szExeFile);
 				SendMessageW(hList, LB_ADDSTRING, 0, (WPARAM)buffer);
 			} while (Process32Next(processHandle, &processes));
 		}
@@ -138,8 +138,7 @@ ATOM TaskManagerClass(HINSTANCE hInstance)
 	TM.cbClsExtra = 0;
 	TM.cbWndExtra = 0;
 	TM.hInstance = hInstance;
-	TM.hIcon = NULL;
-		//LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	TM.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON10));
 	TM.hCursor = LoadCursor(NULL, IDC_ARROW);
 	TM.hbrBackground = (HBRUSH)(COLOR_WINDOW);
 
@@ -154,9 +153,8 @@ ATOM TaskManagerClass(HINSTANCE hInstance)
 BOOL InitializationInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	HWND hWnd;
-
 	hInst = hInstance;
-
+	//require title and nameofWindow from resources
 	LoadString(hInstance, TitleProg, title, 100);
 	LoadString(hInstance, MainWindowName, mwName, 100);
 
@@ -167,20 +165,19 @@ BOOL InitializationInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		return FALSE;
 	}
-
+	HWND cpuUsageGraph = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
+		118, 130, 207, 200, hWnd, (HMENU)CPU_ID, hInstance, NULL);
+	HWND memoryUsageGraph = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
+		218, 130, 310, 200, hWnd, (HMENU)RAM_ID, hInstance, NULL);
 	HWND edit = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
-		110, 260, 400, 200, hWnd, (HMENU)ID_EDIT, hInstance, NULL);
+		110, 300, 400, 200, hWnd, (HMENU)ID_EDIT, hInstance, NULL);
 
+	//Creating a multi-thread for autoupdating window
 	Thread.handleThread = NULL;
 	Thread.ThreadFunction = Thread_InfoSystem;
 	Thread.handleDialog = hWnd;
 	Thread.time = 0;
 	Thread.handleThread = CreateThread(NULL, 0, Thread.ThreadFunction, NULL, NULL, &Thread.threadId);
-
-	for (int i = SIZE - 1; i >= 0; i--) {
-		cpu_mas[i] = -1;
-		mem_mas[i] = -1;
-	}
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
@@ -189,15 +186,22 @@ BOOL InitializationInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+	HDC hdc;
+	PAINTSTRUCT ps;
+	HPEN hpen, hpen_cpu_graph, hpen_mem_graph;
+	RECT rect, rect_cpu, rect_cpu_graph, rect_mem, rect_mem_update, rect_mem_graph, rect_window;
 	int CommandID = LOWORD(wp);
-	POINT Min;
+	POINT Min;  //Min size of main window
+	POINT Max;	//Max size of main window
 	MINMAXINFO* pInfo;
 	switch (msg) {
 	case WM_GETMINMAXINFO:
 
 		pInfo = (MINMAXINFO*)lp;
-		Min = { 650, 450 };
+		Min = { 450, 450 };
+		Max = Min;
 		pInfo->ptMinTrackSize = Min;
+		pInfo->ptMaxTrackSize = Max;
 		return 0;
 	case WM_COMMAND:
 		switch (CommandID) {
@@ -213,6 +217,28 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 		break;
 	case WM_CREATE:
 		MainMenuAdd(hWnd);
+		break;
+	case WM_PAINT: 
+		GetClientRect(hWnd, &rect_window);
+		hdc = BeginPaint(hWnd, &ps);
+
+		SetRect(&rect, 110, 10, 200, 130);
+		if (cpu >= 0)
+		{
+			SetRect(&rect_cpu, 113, 120 - cpu, 197, 127);
+		}
+		
+
+		SetRect(&rect_mem, 210, 10, 300, 130);
+		SetRect(&rect_mem_update, 213, rect_mem.bottom - memory, 297, rect_mem.bottom-3);
+
+		FillRect(hdc, &rect, CreateSolidBrush(RGB(0, 0, 0)));
+		FillRect(hdc, &rect_mem, CreateSolidBrush(RGB(0, 0, 0)));
+		FillRect(hdc, &rect_mem_update, CreateSolidBrush(RGB(0, 255, 0)));
+		FillRect(hdc, &rect_cpu, CreateSolidBrush(RGB(0, 255, 0)));
+
+		EndPaint(hWnd, &ps);
+
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -282,11 +308,10 @@ DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 
 			if (sys != 0) {
 				cpu = (sys - idl) / sys * 100;
-
-				for (int i = SIZE - 1; i > 0; i--) {
-					cpu_mas[i] = cpu_mas[i - 1];
-				}
-				cpu_mas[0] = cpu;
+			}
+			if (cpu >= 0) {
+				wsprintfW(cpu_char, L"      %d %%\nCPU Usage", (int)cpu);
+				SetDlgItemText(Thread.handleDialog, CPU_ID, cpu_char);
 			}
 		}
 
@@ -295,17 +320,15 @@ DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 		statex.dwLength = sizeof(statex);
 
 		GlobalMemoryStatusEx(&statex);
+
+		wsprintf(mem_char, L"      %d %%\nRAM Usage\n  %d MB", (int)memory, (int)((statex.ullTotalPhys - statex.ullAvailPhys)/DIV));
+		SetDlgItemText(Thread.handleDialog, RAM_ID, mem_char);
 		
 		wsprintfW(temp, L"%d %% - CPU usage\r\n", (int)cpu);
 		StringCchCat(buffer, sizeof(temp), temp);
 
 		wsprintfW(buffer, L"%ld %% - RAM uses\r\n", statex.dwMemoryLoad);
 		memory = statex.dwMemoryLoad;
-
-		for (int i = SIZE - 1; i > 0; i--) {
-			mem_mas[i] = mem_mas[i - 1];
-		}
-		mem_mas[0] = memory;
 
 		
 		wsprintfW(temp, L"%ld - total physical memory (RAM)\r\n", statex.ullTotalPhys / DIV);
