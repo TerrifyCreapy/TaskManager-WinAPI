@@ -1,12 +1,15 @@
 ﻿  Main.cpp
-C:\Users\konev\source\repos\WinApi\WinApi\stdafx.h(31,2): warning C4091: typedef : пропускается слева от "THREADS", когда ни одна переменная не объявлена
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(24,24): warning C4101: currentProcess: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(228,32): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(233,50): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(192,23): warning C4101: rect_cpu_graph: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(191,7): warning C4101: hpen: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(191,13): warning C4101: hpen_cpu_graph: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(191,29): warning C4101: hpen_mem_graph: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(192,66): warning C4101: rect_mem_graph: неиспользованная локальная переменная
-C:\Users\konev\source\repos\WinApi\WinApi\Main.cpp(249): warning C4715: CourseWorkProc: значение возвращается не при всех путях выполнения
-  WinApi.vcxproj -> C:\Users\konev\source\repos\WinApi\Debug\WinApi.exe
+C:\Users\konev\Documents\WinApi\WinApi\stdafx.h(31,2): warning C4091: 'typedef ': ignored on left of 'THREADS' when no variable is declared
+C:\Users\konev\Documents\WinApi\WinApi\resource.h(11,1): warning C4005: 'OnMenuAbout': macro redefinition
+C:\Users\konev\Documents\WinApi\WinApi\Definition.h(7): message : see previous definition of 'OnMenuAbout'
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(91,24): warning C4101: 'currentProcess': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(239,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(244,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(148,23): warning C4101: 'rect_cpu_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,7): warning C4101: 'hpen': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,13): warning C4101: 'hpen_cpu_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,29): warning C4101: 'hpen_mem_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(148,66): warning C4101: 'rect_mem_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(175,26): warning C4101: 'currentProcess': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(260): warning C4715: 'CourseWorkProc': not all control paths return a value
+  WinApi.vcxproj -> C:\Users\konev\Documents\WinApi\Debug\WinApi.exe

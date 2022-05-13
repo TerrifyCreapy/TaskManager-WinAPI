@@ -4,7 +4,7 @@
 #include <string>
 #include <WinUser.h>
 #include "Commdlg.h"
-#include<Strsafe.h>
+#include <Strsafe.h>
 #include "TlHelp32.h"
 #include <string.h>
 #include <stdint.h>
@@ -13,85 +13,7 @@
 #include "resource.h"
 using namespace std;
 
-
 static THREADS Thread;
-
-
-
-INT_PTR CALLBACK ProcessList(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	HWND hList = GetDlgItem(hDlg, LIST1);
-	HANDLE processHandle, currentProcess;
-	// structure which describe procces
-	PROCESSENTRY32 processes;
-	WCHAR buffer[255];
-	// create processes screen
-	processHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	processes.dwSize = sizeof(PROCESSENTRY32);
-	UNREFERENCED_PARAMETER(lParam);
-	switch (message)
-	{
-	case WM_INITDIALOG: {
-
-		if (Process32First(processHandle, &processes))
-		{
-			do
-			{
-				wsprintfW(buffer, L" ID [%05d]      Threads [%03d] %30s", processes.th32ProcessID, processes.cntThreads, processes.szExeFile);
-				SendMessageW(hList, LB_ADDSTRING, 0, (WPARAM)buffer);
-			} while (Process32Next(processHandle, &processes));
-		}
-		CloseHandle(processHandle);
-
-		return (INT_PTR)TRUE;
-	}
-	case WM_COMMAND:
-		switch (LOWORD(wParam)) {
-		case IDOK: {
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		case IDCANCEL: {
-			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
-		}
-		case LIST1: {
-			CHAR str[255];
-			iSelect = SendMessage(hList, LB_GETCURSEL, 0, 0);
-			SendMessage(hList, LB_GETTEXT, iSelect, (LPARAM)str);
-
-			int idProc = (((int)str[10] - 48) * 10000 + ((int)str[12] - 48) * 1000 + ((int)str[14] - 48) * 100 + ((int)str[16] - 48) * 10 + ((int)str[18] - 48));
-
-			if (iSelect >= 0)
-			{
-				GetCursorPos(&p);
-
-				hPopupMenu = CreatePopupMenu();
-
-				InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, 1, L"Terminate");
-
-				int choice = TrackPopupMenu(hPopupMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, p.x, p.y + 23, 0, hDlg, NULL);
-
-				switch (choice) {
-				case 1: {
-					_killProcess(idProc);
-					SendMessage(hList, LB_DELETESTRING, (WPARAM)iSelect, 0);
-					break;
-				}
-				}
-
-				DestroyMenu(hPopupMenu);
-			}
-			return (INT_PTR)TRUE;
-
-		}
-		}
-
-	}
-
-	return (INT_PTR)FALSE;
-}
-
 
 int WINAPI wWinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -99,7 +21,6 @@ int WINAPI wWinMain(HINSTANCE hInstance,
 	int       nCmdShow)
 {
 
-	
 	MSG msg;
 	HACCEL hAccelTable;
 
@@ -165,12 +86,47 @@ BOOL InitializationInstance(HINSTANCE hInstance, int nCmdShow)
 	{
 		return FALSE;
 	}
+
+
+	HANDLE processHandle, currentProcess;
+	// structure which describe procces
+	PROCESSENTRY32 processes;
+	WCHAR buffer[255];
+	// create processes screen
+	processHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	processes.dwSize = sizeof(PROCESSENTRY32);
+
 	HWND cpuUsageGraph = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
 		118, 130, 207, 200, hWnd, (HMENU)CPU_ID, hInstance, NULL);
 	HWND memoryUsageGraph = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
 		218, 130, 310, 200, hWnd, (HMENU)RAM_ID, hInstance, NULL);
 	HWND edit = CreateWindow(L"static", L"", WS_CHILD | WS_VISIBLE,
-		110, 300, 400, 200, hWnd, (HMENU)ID_EDIT, hInstance, NULL);
+		110, 200, 400, 200, hWnd, (HMENU)ID_EDIT, hInstance, NULL);
+	HWND info = CreateWindow(L"static", L"        ID                 Thread                                 Name", WS_CHILD | WS_VISIBLE,
+		390, 10, 450, 20, hWnd, (HMENU)ID_EDIT, hInstance, NULL);
+	HWND Refresh = CreateWindow(L"button", L"Refresh",
+		WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+		740, 385,
+		100, 30,
+		hWnd,
+		(HMENU)Refreshed,
+		hInstance, NULL);
+	HWND hListBox = CreateWindow(L"listbox", L"",
+		WS_CHILD | WS_VISIBLE | LBS_STANDARD |
+		LBS_WANTKEYBOARDINPUT,
+		390, 30, 450, 360,
+		hWnd, (HMENU)LIST1, hInst, NULL);
+
+
+	if (Process32First(processHandle, &processes))
+	{
+		do
+		{
+			wsprintfW(buffer, L" ID [%05d]      Threads [%03d] %30s", processes.th32ProcessID, processes.cntThreads, processes.szExeFile);
+			SendMessageW(hListBox, LB_ADDSTRING, 0, (WPARAM)buffer);
+		} while (Process32Next(processHandle, &processes));
+	}
+	CloseHandle(processHandle);
 
 	//Creating a multi-thread for autoupdating window
 	Thread.handleThread = NULL;
@@ -194,31 +150,86 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 	POINT Min;  //Min size of main window
 	POINT Max;	//Max size of main window
 	MINMAXINFO* pInfo;
+
+
+
 	switch (msg) {
 	case WM_GETMINMAXINFO:
 
 		pInfo = (MINMAXINFO*)lp;
-		Min = { 450, 450 };
+		Min = { 890, 480 };
 		Max = Min;
 		pInfo->ptMinTrackSize = Min;
 		pInfo->ptMaxTrackSize = Max;
 		return 0;
 	case WM_COMMAND:
 		switch (CommandID) {
-		case ID_PROCESSES_OPEN: {
-			DialogBox(hInst, MAKEINTRESOURCE(ID_PROCESSES_OPEN), hWnd, ProcessList);
+		case OnMenuAbout: {
+			MessageBoxA(hWnd, "This task manager was developed as course work BMSTU IPS-41B", "ABOUT", MB_OK);
 			break;
+		}
+		case Refreshed: {
+
+			SendDlgItemMessage(hWnd, LIST1, LB_RESETCONTENT, 0, 0);
+
+			HANDLE processHandle, currentProcess;
+			PROCESSENTRY32 processes;
+			WCHAR buffer[255];
+			processHandle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+			processes.dwSize = sizeof(PROCESSENTRY32);
+
+			if (Process32First(processHandle, &processes))
+			{
+				do
+				{
+					wsprintfW(buffer, L" ID [%05d]      Threads [%03d] %30s", processes.th32ProcessID, processes.cntThreads, processes.szExeFile);
+					SendDlgItemMessage(hWnd, LIST1, LB_ADDSTRING, 0, (WPARAM)buffer);
+				} while (Process32Next(processHandle, &processes));
+			}
+			CloseHandle(processHandle);
+			break;
+		}
+		case LIST1: {
+			CHAR str[255];
+			iSelect = SendDlgItemMessage(hWnd, LIST1, LB_GETCURSEL, 0, 0);
+			SendDlgItemMessage(hWnd, LIST1, LB_GETTEXT, iSelect, (LPARAM)str);
+
+			int idProc = (((int)str[10] - 48) * 10000 + ((int)str[12] - 48) * 1000 + ((int)str[14] - 48) * 100 + ((int)str[16] - 48) * 10 + ((int)str[18] - 48));
+
+			if (iSelect >= 0)
+			{
+				GetCursorPos(&p);
+
+				hPopupMenu = CreatePopupMenu();
+
+				InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, 1, L"Terminate");
+
+				int choice = TrackPopupMenu(hPopupMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, p.x, p.y + 23, 0, hWnd, NULL);
+
+				switch (choice) {
+				case 1: {
+					_killProcess(idProc);
+					SendDlgItemMessage(hWnd, LIST1, LB_DELETESTRING, (WPARAM)iSelect, 0);
+					break;
+				}
+				default: break;
+				}
+
+				DestroyMenu(hPopupMenu);
+			}
+			break;
+
 		}
 		case IDM_EXIT: {
 			PostQuitMessage(0);
 		}
-		break;
+					 break;
 		}
 		break;
 	case WM_CREATE:
 		MainMenuAdd(hWnd);
 		break;
-	case WM_PAINT: 
+	case WM_PAINT:
 		GetClientRect(hWnd, &rect_window);
 		hdc = BeginPaint(hWnd, &ps);
 
@@ -227,10 +238,10 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 		{
 			SetRect(&rect_cpu, 113, 120 - cpu, 197, 127);
 		}
-		
+
 
 		SetRect(&rect_mem, 210, 10, 300, 130);
-		SetRect(&rect_mem_update, 213, rect_mem.bottom - memory, 297, rect_mem.bottom-3);
+		SetRect(&rect_mem_update, 213, rect_mem.bottom - memory, 297, rect_mem.bottom - 3);
 
 		FillRect(hdc, &rect, CreateSolidBrush(RGB(0, 0, 0)));
 		FillRect(hdc, &rect_mem, CreateSolidBrush(RGB(0, 0, 0)));
@@ -252,8 +263,7 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 void MainMenuAdd(HWND hwnd) {
 	HMENU RootMenu = CreateMenu();
 	HMENU SubMenu = CreateMenu();
-	AppendMenu(SubMenu, MF_STRING, ID_PROCESSES_OPEN, L"Main");
-	AppendMenu(RootMenu, MF_POPUP, (UINT_PTR)SubMenu, L"File");
+	AppendMenu(RootMenu, MF_STRING, OnMenuAbout, L"About");
 	AppendMenu(RootMenu, MF_STRING, IDM_EXIT, L"Exit");
 
 	SetMenu(hwnd, RootMenu);
@@ -289,10 +299,15 @@ BOOL _killProcess(int procID)
 
 DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 {
+
+
 	THREADS* ti = (THREADS*)lpParam;
+
 	GetSystemTimes(&last_idleTime, &last_kernelTime, &last_userTime);
 	for (;;)
 	{
+
+
 		if (GetSystemTimes(&idleTime, &kernelTime, &userTime) != 0)
 		{
 
@@ -315,22 +330,25 @@ DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 			}
 		}
 
+
+
+
 		MEMORYSTATUSEX statex;
 
 		statex.dwLength = sizeof(statex);
 
 		GlobalMemoryStatusEx(&statex);
 
-		wsprintf(mem_char, L"      %d %%\nRAM Usage\n  %d MB", (int)memory, (int)((statex.ullTotalPhys - statex.ullAvailPhys)/DIV));
+		wsprintf(mem_char, L"      %d %%\nRAM Usage\n  %d MB", (int)memory, (int)((statex.ullTotalPhys - statex.ullAvailPhys) / DIV));
 		SetDlgItemText(Thread.handleDialog, RAM_ID, mem_char);
-		
+
 		wsprintfW(temp, L"%d %% - CPU usage\r\n", (int)cpu);
 		StringCchCat(buffer, sizeof(temp), temp);
 
 		wsprintfW(buffer, L"%ld %% - RAM uses\r\n", statex.dwMemoryLoad);
 		memory = statex.dwMemoryLoad;
 
-		
+
 		wsprintfW(temp, L"%ld - total physical memory (RAM)\r\n", statex.ullTotalPhys / DIV);
 		StringCchCat(buffer, sizeof(temp), temp);
 		wsprintfW(temp, L"%ld - free physical memory (RAM)\r\n", statex.ullAvailPhys / DIV);

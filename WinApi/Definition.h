@@ -3,6 +3,8 @@
 #define ID_EDIT 2002
 #define CPU_ID 12
 #define RAM_ID 15
+#define Refreshed 1239
+#define OnMenuAbout 231
 
 TCHAR mwName[100];
 TCHAR title[100];

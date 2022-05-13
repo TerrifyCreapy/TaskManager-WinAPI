@@ -44,5 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
+    <Image Include="pc.ico" />
   </ItemGroup>
 </Project>

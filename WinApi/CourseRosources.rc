@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Русский (Россия) resources
+// Russian (Russia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
 LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
@@ -52,25 +52,10 @@ END
 
 IDR_ACCELERATOR1 ACCELERATORS
 BEGIN
-    "p",            ID_PROCESSES_OPEN,      ASCII,  ALT, NOINVERT
-    "p",            ID_PROCESSES_OPEN,      ASCII,  ALT, NOINVERT
+    "a",            OnMenuAbout,            ASCII,  ALT, NOINVERT
+    1092,           OnMenuAbout,            ASCII,  ALT, NOINVERT
     "e",            IDM_EXIT,               ASCII,  ALT, NOINVERT
     1091,           IDM_EXIT,               ASCII,  ALT, NOINVERT
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-ID_PROCESSES_OPEN DIALOGEX 0, 0, 241, 218
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Process list"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,184,197,50,14
-    LISTBOX         LIST1,7,7,227,182,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -81,7 +66,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON10               ICON                    "pc.ico"
+IDI_ICON10              ICON                    "pc.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -95,7 +80,7 @@ BEGIN
     MainWindowName          "Task manager"
 END
 
-#endif    // Русский (Россия) resources
+#endif    // Russian (Russia) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
