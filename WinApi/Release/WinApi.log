@@ -1,0 +1,6 @@
+﻿  Generating code
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(258): warning C4715: 'CourseWorkProc': not all control paths return a value
+  All 12 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  WinApi.vcxproj -> C:\Users\konev\Documents\WinApi\Release\WinApi.exe

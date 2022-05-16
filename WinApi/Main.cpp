@@ -1,13 +1,7 @@
 #include <Windows.h>
-#include "Definition.h"
-#include <stdio.h>
-#include <string>
-#include <WinUser.h>
-#include "Commdlg.h"
-#include <Strsafe.h>
-#include "TlHelp32.h"
-#include <string.h>
-#include <stdint.h>
+#include "Definition.h" //All defines of func and vars
+#include <Strsafe.h> //StringCchCat - does not allow you to overflow the buffer 
+#include "TlHelp32.h" //Library for reading proccesses
 #include <memory>
 #include "stdafx.h"
 #include "resource.h"
@@ -203,6 +197,7 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 				hPopupMenu = CreatePopupMenu();
 
 				InsertMenu(hPopupMenu, 0, MF_BYPOSITION | MF_STRING, 1, L"Terminate");
+				InsertMenu(hPopupMenu, 1, MF_BYPOSITION | MF_STRING, 2, L"Close");
 
 				int choice = TrackPopupMenu(hPopupMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, p.x, p.y + 23, 0, hWnd, NULL);
 
@@ -211,6 +206,9 @@ LRESULT CALLBACK CourseWorkProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 					_killProcess(idProc);
 					SendDlgItemMessage(hWnd, LIST1, LB_DELETESTRING, (WPARAM)iSelect, 0);
 					break;
+				}
+				case 2: {
+					DestroyMenu(hPopupMenu);
 				}
 				default: break;
 				}
@@ -331,8 +329,6 @@ DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 		}
 
 
-
-
 		MEMORYSTATUSEX statex;
 
 		statex.dwLength = sizeof(statex);
@@ -363,7 +359,4 @@ DWORD WINAPI Thread_InfoSystem(LPVOID lpParam)
 		InvalidateRect(Thread.handleDialog, NULL, TRUE);
 		Sleep(1000);
 	}
-
 }
-
-

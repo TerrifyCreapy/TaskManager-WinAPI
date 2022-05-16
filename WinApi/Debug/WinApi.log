@@ -2,14 +2,14 @@
 C:\Users\konev\Documents\WinApi\WinApi\stdafx.h(31,2): warning C4091: 'typedef ': ignored on left of 'THREADS' when no variable is declared
 C:\Users\konev\Documents\WinApi\WinApi\resource.h(11,1): warning C4005: 'OnMenuAbout': macro redefinition
 C:\Users\konev\Documents\WinApi\WinApi\Definition.h(7): message : see previous definition of 'OnMenuAbout'
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(91,24): warning C4101: 'currentProcess': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(239,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(244,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(148,23): warning C4101: 'rect_cpu_graph': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,7): warning C4101: 'hpen': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,13): warning C4101: 'hpen_cpu_graph': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(147,29): warning C4101: 'hpen_mem_graph': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(148,66): warning C4101: 'rect_mem_graph': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(175,26): warning C4101: 'currentProcess': unreferenced local variable
-C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(260): warning C4715: 'CourseWorkProc': not all control paths return a value
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(85,24): warning C4101: 'currentProcess': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(237,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(242,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(142,23): warning C4101: 'rect_cpu_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(141,7): warning C4101: 'hpen': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(141,13): warning C4101: 'hpen_cpu_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(141,29): warning C4101: 'hpen_mem_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(142,66): warning C4101: 'rect_mem_graph': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(169,26): warning C4101: 'currentProcess': unreferenced local variable
+C:\Users\konev\Documents\WinApi\WinApi\Main.cpp(258): warning C4715: 'CourseWorkProc': not all control paths return a value
   WinApi.vcxproj -> C:\Users\konev\Documents\WinApi\Debug\WinApi.exe
